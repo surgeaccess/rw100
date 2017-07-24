@@ -46,6 +46,7 @@ In this way, production webpages (or HTML5 apps) can be built for all platforms 
 ## HTML
 
 ```html
+<script type="text/javascript" src="js/wearml_engine.js"></script>
 <body id="p_test">
 <div id="app">
     <div class="container test-form" data-wml-style=".rootLayout" >
