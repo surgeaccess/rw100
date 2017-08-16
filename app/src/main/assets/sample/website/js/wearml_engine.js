@@ -12,8 +12,8 @@
 /*----------------------- SOURCE MODULE INFORMATION -------------------------+
  |
  | Source Name:  WearML Engine
- | Version: v0.8
- | Date: July 2017
+ | Version: v0.9
+ | Date: August 2017
  | Author: Luke Hopkins
  |
  +---------------------------------------------------------------------------*/
@@ -39,6 +39,7 @@ var overlay_offset = "--overlay_offset";
 var hf_scroll = "--hf_scroll";
 var barcode = "--hf_barcode";
 var global = "--global_commands";
+var hide_help = "--hide_help";
 var broadcast_results = "--broadcast_results";
 
 var root_text_field = "";
@@ -54,6 +55,7 @@ var root_overlay_show_dot = "";
 var root_overlay_show_icon = "";
 var root_overlay_offset = "";
 var root_hf_scroll = "";
+var root_hide_help = "";
 
 function getCommands() {
    var elements = getAllElementsWithAttribute('*');
@@ -69,14 +71,14 @@ function getAllElementsWithAttribute(attribute)
   for (var i = 0, n = allElements.length; i < n; i++)
   {
     //Check element to see if it has atleast one of our tags
-    if (allElements[i].getAttribute('data-wml-style') !== null || allElements[i].getAttribute('data-wml-speech') !== null || allElements[i].tagName != "DIV")
+    if (allElements[i].getAttribute('data-wml-style') !== null || allElements[i].getAttribute('data-wml-speech-command') !== null || allElements[i].tagName != "DIV")
     {
         var styleId = allElements[i].getAttribute('data-wml-style');
         var command = allElements[i].text;
 
         var speech_command = allElements[i].getAttribute('data-wml-speech-command');
 
-        if(speech_command !== null){
+        if(speech_command != undefined){
             command = speech_command;
         }
 
@@ -134,10 +136,12 @@ function generateXML(){
 
       var style = getStyle(styleId)
 
-      xml += wearMLParser(style, wearMLElements[i]);
+      if(style != undefined){
+			xml += wearMLParser(style, wearMLElements[i]);
+      }
 
       if(command != undefined){
-       xml += "speech_command=\""+ command + "\" ";
+        xml += "speech_command=\""+ command + "\" ";
       }
 
       xml += "/> ";
@@ -213,6 +217,7 @@ function wearMLParser(e, element) {
    var get_hf_scroll = e != undefined ? e.getPropertyValue(hf_scroll).trim() : root_hf_scroll;
    var get_barcode = e != undefined ? e.getPropertyValue(barcode).trim() : "";
    var get_global = e != undefined ? e.getPropertyValue(global).trim() : "";
+   var get_hide_help = e != undefined ? e.getPropertyValue(hide_help).trim() : "";
    var get_broadcast_results = e != undefined ? e.getPropertyValue(broadcast_results).trim() : "";
 
    /**
@@ -233,6 +238,7 @@ function wearMLParser(e, element) {
                    root_overlay_show_icon = get_overlay_show_icon;
                    root_overlay_offset = get_overlay_offset;
                    root_hf_scroll = get_hf_scroll;
+                   root_hide_help = get_hide_help;
               }
    }
 
@@ -327,8 +333,6 @@ function wearMLParser(e, element) {
        }
     }
 
-console.log(attributes);
-
     /**
         Overlay show icon
     **/
@@ -361,6 +365,14 @@ console.log(attributes);
       attributes += "barcode="+ get_barcode + " ";
 
     }
+
+     /**
+           Hide Help
+    */
+    if(get_hide_help != ""){
+          attributes += "barcode="+ get_barcode + " ";
+
+     }
 
     /**
         Global Commands
