@@ -137,7 +137,11 @@ function generateXML(){
       var style = getStyle(styleId)
 
       if(style != undefined){
+<<<<<<< HEAD
          xml += wearMLParser(style, wearMLElements[i]);
+=======
+			xml += wearMLParser(style, wearMLElements[i]);
+>>>>>>> 6a1e9f56339c7ffe25de135b2047ac72d070aaad
       }
 
       if(command != undefined){
